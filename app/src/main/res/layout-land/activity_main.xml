@@ -63,7 +63,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
 
-       />
+        />
 
     <androidx.constraintlayout.widget.Barrier
         android:id="@+id/barrier_header"
@@ -94,11 +94,11 @@
         />
 
     <ImageButton
-        android:id="@+id/likes"
+        android:id="@+id/shares"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:contentDescription="@string/likes"
-        android:src="@drawable/ic_like_24"
+        android:contentDescription="@string/shares"
+        android:src="@drawable/ic_share_24"
         android:background="@android:color/transparent"
 
         app:layout_constraintTop_toTopOf="@+id/barrier_footer"
@@ -107,39 +107,12 @@
 
         />
     <TextView
-        android:id="@+id/q_likes"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-
-        app:layout_constraintTop_toTopOf="@id/likes"
-        app:layout_constraintBottom_toBottomOf="@id/likes"
-        app:layout_constraintStart_toEndOf="@id/likes"
-        android:layout_marginStart="@dimen/padding_self"
-
-        tools:text="@sample/posts.json/data/likes"
-        />
-
-    <ImageButton
-        android:id="@+id/shares"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:contentDescription="@string/shares"
-        android:src="@drawable/ic_share_24"
-        android:background="@android:color/transparent"
-
-        app:layout_constraintTop_toTopOf="@id/likes"
-        app:layout_constraintBottom_toBottomOf="@id/likes"
-        app:layout_constraintStart_toEndOf="@id/q_likes"
-        android:layout_marginStart="@dimen/padding_global"
-
-        />
-    <TextView
         android:id="@+id/q_shares"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
 
-        app:layout_constraintTop_toTopOf="@id/likes"
-        app:layout_constraintBottom_toBottomOf="@id/likes"
+        app:layout_constraintTop_toTopOf="@id/shares"
+        app:layout_constraintBottom_toBottomOf="@id/shares"
         app:layout_constraintStart_toEndOf="@id/shares"
         android:layout_marginStart="@dimen/padding_self"
 
@@ -154,8 +127,8 @@
         android:src="@drawable/ic_views_24"
         android:background="@android:color/transparent"
 
-        app:layout_constraintTop_toTopOf="@+id/likes"
-        app:layout_constraintBottom_toBottomOf="@+id/likes"
+        app:layout_constraintTop_toTopOf="@id/shares"
+        app:layout_constraintBottom_toBottomOf="@id/shares"
         app:layout_constraintEnd_toStartOf="@id/q_views"
         android:layout_marginEnd="@dimen/padding_self"
 
@@ -165,8 +138,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
 
-        app:layout_constraintTop_toTopOf="@id/likes"
-        app:layout_constraintBottom_toBottomOf="@id/likes"
+        app:layout_constraintTop_toTopOf="@id/shares"
+        app:layout_constraintBottom_toBottomOf="@id/shares"
         app:layout_constraintEnd_toEndOf="parent"
 
         tools:text="@sample/posts.json/data/views"

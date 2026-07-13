@@ -5,16 +5,81 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import ru.netology.nmedia.databinding.ActivityMainBinding
+import ru.netology.nmedia.dto.Post
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        setContentView(R.layout.activity_main)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
+        val binding = ActivityMainBinding.inflate(layoutInflater);
+        setContentView(binding.root)
+        ViewCompat.setOnApplyWindowInsetsListener(binding.main) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+            v.setPadding(systemBars.left + v.paddingLeft,
+                systemBars.top + v.paddingTop,
+                systemBars.right + v.paddingRight,
+                systemBars.bottom + v.paddingBottom)
             insets
         }
+
+        val post = Post(
+            id = 1,
+            author = "Нетология. Университет интернет-профессий будущего",
+            content = "Привет, это новая Нетология! Когда-то Нетология  начиналась с интенсивов по онлайн-маркетингу. Затем появились курсы по дизайну, разработке, аналитике  и управлению. Мы растём сами и помогаем расти студентам: от новичков до уверенных профессионалов. Но самое важное остаётся с нами: мы верим, что в каждом уже есть сила, которая заставляет хотеть больше, целиться выше, бежать быстрее. Наша миссия — помочь встать на путь роста и начать цепочку перемен. http://netolo.by/fyb",
+            published = "21 мая в 18:36",
+            likes = 999_998,
+            likedByMe = true,
+            shares = 1298,
+            views = 19_299_999
+        )
+
+        with(binding) {
+            author.text = post.author
+            published.text = post.published
+            content.text = post.content
+            if (post.likedByMe) {
+                likes?.setImageResource(R.drawable.ic_liked_24)
+            }
+            qLikes?.text = formatCount(post.likes)
+            qShares.text = formatCount(post.shares)
+            qViews.text = formatCount(post.views)
+
+            likes?.setOnClickListener {
+                post.likedByMe = !post.likedByMe
+                likes.setImageResource(
+                    if (post.likedByMe) R.drawable.ic_liked_24 else R.drawable.ic_like_24
+                )
+                if (post.likedByMe) post.likes++ else post.likes--
+                qLikes?.text = formatCount(post.likes)
+            }
+
+            shares.setOnClickListener {
+                post.shares++
+                qShares.text = formatCount(post.shares)
+
+                // для демонстрации изменения views
+                post.views++
+                qViews.text = formatCount(post.views)
+            }
+        }
+
+    }
+
+    fun formatCount(count: Int) : String {
+        val ADD_SUFFIX_NONE = 1_000
+        val ADD_SUFFIX_KILO = 10_000
+        val ADD_SUFFIX_MEGA = 1_000_000
+
+        if(count < ADD_SUFFIX_NONE) return count.toString()
+        if(count < ADD_SUFFIX_KILO) {
+            val countShown = (count * 10 / ADD_SUFFIX_NONE).toDouble() / 10
+            return countShown.toString() + "K"
+        }
+        if(count < ADD_SUFFIX_MEGA) {
+            return (count / 1000).toString() + "K"
+        }
+        val countShown = (count * 10 / ADD_SUFFIX_MEGA).toDouble() / 10
+        return countShown.toString() + "M"
     }
 }
