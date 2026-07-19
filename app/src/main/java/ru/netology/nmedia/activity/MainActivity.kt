@@ -8,6 +8,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import ru.netology.nmedia.R
 import ru.netology.nmedia.databinding.ActivityMainBinding
+import ru.netology.nmedia.databinding.CardPostBinding
 import ru.netology.nmedia.viewmodel.PostViewModel
 
 class MainActivity : AppCompatActivity() {
@@ -26,27 +27,32 @@ class MainActivity : AppCompatActivity() {
         }
 
         val viewModel: PostViewModel by viewModels<PostViewModel>()
-        viewModel.data.observe(this) { post ->
-            with(binding) {
-                author.text = post.author
-                published.text = post.published
-                content.text = post.content
-                if (post.likedByMe) {
-                    likes?.setImageResource(R.drawable.ic_liked_24)
-                }
-                qLikes?.text = formatCount(post.likes)
-                qShares.text = formatCount(post.shares)
-                qViews.text = formatCount(post.views)
+        viewModel.data.observe(this) { postList ->
+            binding.container.removeAllViews()
+            postList.map { post ->                // можно упростить - исключить .map,
+                                                  // а в параметр attachToParent поставить true
+                CardPostBinding.inflate(layoutInflater, binding.container, false).apply {
+                    author.text = post.author
+                    published.text = post.published
+                    content.text = post.content
+                    if (post.likedByMe) {
+                        likes?.setImageResource(R.drawable.ic_liked_24)
+                    }
+                    qLikes?.text = formatCount(post.likes)
+                    qShares.text = formatCount(post.shares)
+                    qViews.text = formatCount(post.views)
 
+                    likes?.setOnClickListener {
+                        viewModel.likeById(post.id)
+                    }
+
+                    shares.setOnClickListener {
+                        viewModel.shareById(post.id)
+                    }
+                }.root
+            }.forEach {
+                binding.container.addView(it)
             }
-        }
-
-        binding.likes?.setOnClickListener {
-            viewModel.like()
-        }
-
-        binding.shares.setOnClickListener {
-            viewModel.share()
         }
     }
 
