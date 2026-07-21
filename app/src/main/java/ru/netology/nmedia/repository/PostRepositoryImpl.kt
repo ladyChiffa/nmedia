@@ -72,4 +72,9 @@ class PostRepositoryImpl : PostRepository {
         }
         data.value = postList
     }
+
+    override fun removeById(id: Long) {
+        postList = postList.filter { it.id != id} // фильтруемся всем постам, у которых id не совпадает
+        data.value = postList
+    }
 }

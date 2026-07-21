@@ -2,6 +2,7 @@ package ru.netology.nmedia.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.PopupMenu
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -11,7 +12,9 @@ import ru.netology.nmedia.dto.Post
 
 typealias PostListener = (Post) -> Unit
 
-class PostsAdapter (private val likeListener: PostListener, private val shareListener: PostListener)
+class PostsAdapter (private val likeListener: PostListener,
+                    private val shareListener: PostListener,
+                    private val removeListener: PostListener)
     : ListAdapter<Post, PostViewHolder>(PostDiffCallback) {
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): PostViewHolder {
@@ -20,7 +23,7 @@ class PostsAdapter (private val likeListener: PostListener, private val shareLis
             viewGroup,
             false
         )
-        return PostViewHolder(binding, likeListener, shareListener)
+        return PostViewHolder(binding, likeListener, shareListener, removeListener)
     }
 
     override fun onBindViewHolder(viewHolder: PostViewHolder, position: Int) {
@@ -31,7 +34,8 @@ class PostsAdapter (private val likeListener: PostListener, private val shareLis
 
 class PostViewHolder (private val binding: CardPostBinding,
                       private val likeListener: PostListener,
-    private val shareListener: PostListener) : RecyclerView.ViewHolder(binding.root) {
+                      private val shareListener: PostListener,
+                      private val removeListener: PostListener) : RecyclerView.ViewHolder(binding.root) {
     fun bind (post: Post) {
         with(binding) {
             author.text = post.author
@@ -46,6 +50,24 @@ class PostViewHolder (private val binding: CardPostBinding,
             }
             shares.setOnClickListener {
                 shareListener(post)
+            }
+            menu.setOnClickListener {
+                PopupMenu(it.context, it).apply {
+                    inflate(R.menu.menu_post) // заполняем элементами
+                    setOnMenuItemClickListener { item ->    // и ждем события клика по меню
+                        when (item.itemId) {                // - по идентификатору определяем, что кликнули
+                            R.id.remove_post -> {
+                                removeListener(post)
+                                true
+                            }
+                            R.id.color_post -> {
+                                // removeListener(post)
+                                true
+                            }
+                            else -> false
+                        }
+                    }
+                }.show() // и не забываем после настройки меню показать
             }
         }
     }
