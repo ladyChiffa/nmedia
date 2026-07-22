@@ -12,9 +12,9 @@ import ru.netology.nmedia.dto.Post
 
 typealias PostListener = (Post) -> Unit
 
-class PostsAdapter (private val likeListener: PostListener,
-                    private val shareListener: PostListener,
-                    private val removeListener: PostListener)
+class PostsAdapter (private val onLikeListener: PostListener,
+                    private val onShareListener: PostListener,
+                    private val onRemoveListener: PostListener)
     : ListAdapter<Post, PostViewHolder>(PostDiffCallback) {
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): PostViewHolder {
@@ -23,7 +23,7 @@ class PostsAdapter (private val likeListener: PostListener,
             viewGroup,
             false
         )
-        return PostViewHolder(binding, likeListener, shareListener, removeListener)
+        return PostViewHolder(binding, onLikeListener, onShareListener, onRemoveListener)
     }
 
     override fun onBindViewHolder(viewHolder: PostViewHolder, position: Int) {
@@ -33,9 +33,9 @@ class PostsAdapter (private val likeListener: PostListener,
 }
 
 class PostViewHolder (private val binding: CardPostBinding,
-                      private val likeListener: PostListener,
-                      private val shareListener: PostListener,
-                      private val removeListener: PostListener) : RecyclerView.ViewHolder(binding.root) {
+                      private val onLikeListener: PostListener,
+                      private val onShareListener: PostListener,
+                      private val onRemoveListener: PostListener) : RecyclerView.ViewHolder(binding.root) {
     fun bind (post: Post) {
         with(binding) {
             author.text = post.author
@@ -46,10 +46,10 @@ class PostViewHolder (private val binding: CardPostBinding,
             qShares.text = formatCount(post.shares)
             qViews.text = formatCount(post.views)
             likes?.setOnClickListener {
-                likeListener(post)
+                onLikeListener(post)
             }
             shares.setOnClickListener {
-                shareListener(post)
+                onShareListener(post)
             }
             menu.setOnClickListener {
                 PopupMenu(it.context, it).apply {
@@ -57,11 +57,11 @@ class PostViewHolder (private val binding: CardPostBinding,
                     setOnMenuItemClickListener { item ->    // и ждем события клика по меню
                         when (item.itemId) {                // - по идентификатору определяем, что кликнули
                             R.id.remove_post -> {
-                                removeListener(post)
+                                onRemoveListener(post)
                                 true
                             }
                             R.id.color_post -> {
-                                // removeListener(post)
+                                // onRemoveListener(post)
                                 true
                             }
                             else -> false
