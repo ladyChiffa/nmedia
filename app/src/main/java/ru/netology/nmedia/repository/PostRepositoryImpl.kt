@@ -72,4 +72,21 @@ class PostRepositoryImpl : PostRepository {
         }
         data.value = postList
     }
+    override fun removeById(id: Long) {
+        postList = postList.filter { it.id != id} // фильтруемся всем постам, у которых id не совпадает
+        data.value = postList
+    }
+
+    override fun save(post: Post) {
+        if (post.id == 0L) {
+            val maxId = postList.maxOfOrNull { it.id }?.inc() ?: 1L
+            postList = listOf(post.copy(id = maxId, author = "Me", published = "Now")) + postList // Добавляем пост в начало нашего списка
+        }
+        else {
+            postList = postList.map {
+                if (it.id != post.id) it else it.copy(content = post.content)
+            }
+        }
+        data.value = postList
+    }
 }
