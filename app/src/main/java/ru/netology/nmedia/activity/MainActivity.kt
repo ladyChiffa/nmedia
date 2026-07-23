@@ -1,6 +1,7 @@
 package ru.netology.nmedia.activity
 
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
@@ -35,7 +36,11 @@ class MainActivity : AppCompatActivity() {
             override fun onLike(post: Post) = viewModel.likeById(post.id)
             override fun onShare(post: Post) = viewModel.shareById(post.id)
             override fun onRemove(post: Post) = viewModel.removeById(post.id)
-            override fun onEdit(post: Post) = viewModel.edit(post)
+            override fun onEdit(post: Post) {
+                binding.editing.text = post.content
+                binding.group.visibility = View.VISIBLE
+                viewModel.edit(post)
+            }
         })
 
         binding.list.adapter = adapter
@@ -59,8 +64,14 @@ class MainActivity : AppCompatActivity() {
             viewModel.save(content)
             binding.content.clearFocus()
             binding.content.setText("")
+            binding.group.visibility = View.GONE
+            AndroidUtils.hideKeyboard(binding.content)
+        }
 
-            // и скрыть клавиатуру
+        binding.cancelEdit.setOnClickListener {
+            binding.content.clearFocus()
+            binding.content.setText("")
+            binding.group.visibility = View.GONE
             AndroidUtils.hideKeyboard(binding.content)
         }
     }

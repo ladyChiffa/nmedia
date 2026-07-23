@@ -10,4 +10,5 @@
     <string name="edit">Edit</string>
     <string name="content">Write something here...</string>
     <string name="error_empty_post">Text is empty!</string>
+    <string name="edit_header">Edit Message</string>
 </resources>
