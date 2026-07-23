@@ -24,10 +24,13 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         ViewCompat.setOnApplyWindowInsetsListener(binding.main) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left + v.paddingLeft,
-                systemBars.top + v.paddingTop,
-                systemBars.right + v.paddingRight,
-                systemBars.bottom + v.paddingBottom)
+            val imeInsets = insets.getInsets(WindowInsetsCompat.Type.ime())
+            val isImeVisible = insets.isVisible(WindowInsetsCompat.Type.ime())
+
+            v.setPadding(v.paddingLeft,
+                systemBars.top,
+                v.paddingRight,
+                if (isImeVisible) imeInsets.bottom else systemBars.bottom)
             insets
         }
 
@@ -73,6 +76,7 @@ class MainActivity : AppCompatActivity() {
             binding.content.setText("")
             binding.group.visibility = View.GONE
             AndroidUtils.hideKeyboard(binding.content)
+            viewModel.dropEdit()
         }
     }
 }

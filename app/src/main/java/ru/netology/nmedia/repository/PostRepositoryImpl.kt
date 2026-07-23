@@ -79,7 +79,8 @@ class PostRepositoryImpl : PostRepository {
 
     override fun save(post: Post) {
         if (post.id == 0L) {
-            postList = listOf(post.copy(author = "Me", published = "Now")) + postList // Добавляем пост в начало нашего списка
+            val maxId = postList.maxOfOrNull { it.id }?.inc() ?: 1L
+            postList = listOf(post.copy(id = maxId, author = "Me", published = "Now")) + postList // Добавляем пост в начало нашего списка
         }
         else {
             postList = postList.map {
