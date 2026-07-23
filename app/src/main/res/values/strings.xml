@@ -7,5 +7,7 @@
     <string name="shares">Shares</string>
     <string name="views">Views</string>
     <string name="remove">Remove</string>
-    <string name="color">Color</string>
+    <string name="edit">Edit</string>
+    <string name="content">Write something here...</string>
+    <string name="error_empty_post">Text is empty!</string>
 </resources>

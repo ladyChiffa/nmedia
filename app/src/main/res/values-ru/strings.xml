@@ -8,5 +8,7 @@
     <string name="shares">Поделились</string>
     <string name="views">Просмотров</string>
     <string name="remove">Удалить</string>
-    <string name="color">Покрасить</string>
+    <string name="edit">Редактировать</string>
+    <string name="content">Напишите что-нибудь здесь...</string>
+    <string name="error_empty_post">Пустой текст!</string>
 </resources>
